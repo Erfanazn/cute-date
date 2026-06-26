@@ -1,45 +1,67 @@
 ```javascript
 const card = document.querySelector(".card");
+
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
-// اطلاعات تلگرام
-const TOKEN = "8906017946:AAE0KCyndrhRrpbSb59MAss0rfJS42NbAbY";
-const CHAT_ID = "629559188";
 
 // ====================
 // NO BUTTON
 // ====================
 
 function moveNoButton() {
+
     const container = document.querySelector(".buttons");
 
-    const maxX = container.clientWidth - noBtn.offsetWidth;
-    const maxY = container.clientHeight - noBtn.offsetHeight;
+    const maxX =
+        container.clientWidth - noBtn.offsetWidth;
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    const maxY =
+        container.clientHeight - noBtn.offsetHeight;
+
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+
     noBtn.style.transform = "none";
 }
 
-noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("touchstart", e => {
-    e.preventDefault();
-    moveNoButton();
-});
+noBtn.addEventListener(
+    "mouseenter",
+    moveNoButton
+);
+
+noBtn.addEventListener(
+    "touchstart",
+    function (e) {
+
+        e.preventDefault();
+
+        moveNoButton();
+    }
+);
+
 
 // ====================
 // YES BUTTON
 // ====================
 
-yesBtn.addEventListener("click", showDatePage);
+yesBtn.addEventListener(
+    "click",
+    showDatePage
+);
+
 
 function showDatePage() {
 
     card.innerHTML = `
+
         <h1>✨ When are you free? ✨</h1>
 
-        <input id="datePicker" placeholder="Select date">
+        <input id="datePicker"
+               placeholder="Select date">
 
         <br><br>
 
@@ -48,20 +70,27 @@ function showDatePage() {
         <br><br>
 
         <select id="timeInput">
+
             <option value="">Choose time</option>
 
-            <option>18:00</option>
-            <option>18:30</option>
-            <option>19:00</option>
-            <option>19:30</option>
-            <option>20:00</option>
-            <option>20:30</option>
-            <option>21:00</option>
-            <option>21:30</option>
-            <option>22:00</option>
-            <option>22:30</option>
-            <option>23:00</option>
-            <option>23:30</option>
+            <option value="18:00">18:00</option>
+            <option value="18:30">18:30</option>
+
+            <option value="19:00">19:00</option>
+            <option value="19:30">19:30</option>
+
+            <option value="20:00">20:00</option>
+            <option value="20:30">20:30</option>
+
+            <option value="21:00">21:00</option>
+            <option value="21:30">21:30</option>
+
+            <option value="22:00">22:00</option>
+            <option value="22:30">22:30</option>
+
+            <option value="23:00">23:00</option>
+            <option value="23:30">23:30</option>
+
         </select>
 
         <br><br>
@@ -69,12 +98,18 @@ function showDatePage() {
         <button onclick="foodPage()">
             Next ❤️
         </button>
+
     `;
 
     $("#datePicker").persianDatepicker({
+
         format: 'YYYY/MM/DD'
+
     });
+
 }
+
+
 
 // ====================
 // FOOD PAGE
@@ -88,64 +123,51 @@ function foodPage() {
     window.selectedTime =
         document.getElementById("timeInput").value;
 
-    if (!window.selectedDate || !window.selectedTime) {
+    if (
+        !window.selectedDate ||
+        !window.selectedTime
+    ) {
 
-        alert("Please select date and time ❤️");
+        alert(
+            "Please select date and time ❤️"
+        );
+
         return;
     }
 
     card.innerHTML = `
+
         <h1>🍽️ What should we eat?</h1>
 
         <button class="food-btn"
-            onclick="finish('🍕 Pizza')">🍕 Pizza</button>
+                onclick="finish('🍕 Pizza')">
+            🍕 Pizza
+        </button>
 
         <button class="food-btn"
-            onclick="finish('🍝 Pasta')">🍝 Pasta</button>
+                onclick="finish('🍝 Pasta')">
+            🍝 Pasta
+        </button>
 
         <button class="food-btn"
-            onclick="finish('🍣 Sushi')">🍣 Sushi</button>
+                onclick="finish('🍣 Sushi')">
+            🍣 Sushi
+        </button>
 
         <button class="food-btn"
-            onclick="finish('🍨 Ice Cream')">🍨 Ice Cream</button>
+                onclick="finish('🍨 Ice Cream')">
+            🍨 Ice Cream
+        </button>
 
         <button class="food-btn"
-            onclick="finish('☕ Coffee')">☕ Coffee</button>
+                onclick="finish('☕ Coffee')">
+            ☕ Coffee
+        </button>
+
     `;
 }
 
-// ====================
-// TELEGRAM
-// ====================
 
-async function sendToTelegram(message) {
-
-    try {
-
-        const response = await fetch(
-            `https://api.telegram.org/bot${TOKEN}/sendMessage`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        console.log(data);
-
-    } catch (error) {
-
-        console.log(error);
-        alert("Telegram Error");
-    }
-}
 
 // ====================
 // HEARTS
@@ -158,12 +180,16 @@ function createHearts() {
 
     for (let i = 0; i < 60; i++) {
 
-        const heart = document.createElement("div");
+        const heart =
+            document.createElement("div");
 
         heart.classList.add("heart");
+
         heart.innerHTML = "❤️";
 
-        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.left =
+            Math.random() * 100 + "vw";
+
         heart.style.animationDuration =
             (3 + Math.random() * 3) + "s";
 
@@ -172,36 +198,58 @@ function createHearts() {
 
         container.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 6000);
+        setTimeout(() => {
+
+            heart.remove();
+
+        }, 6000);
     }
 }
+
+
 
 // ====================
 // FINISH
 // ====================
 
-async function finish(food) {
+function finish(food) {
 
-    const message = `
-❤️ New Date Accepted ❤️
+    const TOKEN =
+        "8906017946:AAE0KCyndrhRrpbSb59MAss0rfJS42NbAbY";
+
+    const CHAT_ID =
+        "629559188";
+
+    const message =
+
+`❤️ New Date Accepted ❤️
 
 📅 Date: ${window.selectedDate}
-🕒 Time: ${window.selectedTime}
-🍽️ Food: ${food}
-`;
 
-    await sendToTelegram(message);
+🕒 Time: ${window.selectedTime}
+
+🍽️ Food: ${food}`;
+
+    fetch(
+        `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`
+    );
 
     createHearts();
 
     card.innerHTML = `
+
         <h1 class="final-text">
             ❤️ It's a date! ❤️
         </h1>
 
-        <p>See you soon, my beautiful ❤️</p>
+        <p>
+            See you soon, my beautiful ❤️
+        </p>
 
-        <p>I can't wait to see you ✨</p>
+        <p>
+            I can't wait to see you ✨
+        </p>
+
     `;
 }
 ```
