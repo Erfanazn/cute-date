@@ -114,14 +114,13 @@ function finish(food){
         "🕒 Time: " + window.selectedTime + "\n\n" +
         "🍽️ Food: " + food;
 
-    fetch(
-        "https://api.telegram.org/bot" +
-        TOKEN +
-        "/sendMessage?chat_id=" +
-        CHAT_ID +
-        "&text=" +
-        encodeURIComponent(message)
-    );
+fetch(
+    "https://telegram-proxy.erfanakbarzadegan.workers.dev/?text=" +
+    encodeURIComponent(message)
+)
+.then(response => response.text())
+.then(data => console.log(data))
+.catch(error => console.log(error));
 
     createHearts();
 
