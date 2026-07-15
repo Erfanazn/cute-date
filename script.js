@@ -379,8 +379,19 @@ class UIController {
         }
 
         Particles.createRain(AppState.emojiTheme);
+
+        // --- بخش جدید برای ارسال اطلاعات به ربات ---
+        // استخراج ساعت و غذا (بدون فاصله و ایموجی برای لینک تلگرام)
+        const safeTime = AppState.time.replace(':', ''); 
+        const safeChoice = (AppState.food || AppState.activity).replace(/[^a-zA-Z]/g, '');
+        const payload = `${safeTime}_${safeChoice}`;
+
+        // آپدیت کردن لینک دکمه تلگرام در صفحه آخر
+        const tgBtn = document.querySelector('.btn-telegram');
+        if(tgBtn) {
+            tgBtn.href = `https://t.me/erfan_date_bot?start=${payload}`;
+        }
     }
-}
 
 // --------------------------------------------------------------------------
 // 7. BOOTSTRAP
