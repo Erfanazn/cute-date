@@ -1,56 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ff758c">
+    <meta name="description" content="A special invitation just for you.">
     <title>For You ❤️</title>
 
+    <!-- Persian Datepicker Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    
+    <!-- Core Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Persian Datepicker -->
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
-
+    <!-- External Dependencies for Datepicker -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-
 </head>
-
 <body>
 
-<div class="card">
-
-    <h1>
-        🌸 Will you go on a date with me? 🌸
-    </h1>
-
-    <div class="buttons">
-
-        <button id="yesBtn">
-            YES ❤️
-        </button>
-
-        <button id="noBtn">
-            NO 😢
-        </button>
-
+    <!-- Premium Animated Background -->
+    <div class="bg-gradient-anim"></div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
 
-</div>
+    <!-- Particle/Emoji Rain Container -->
+    <div id="particle-container"></div>
 
-<div id="hearts-container"></div>
+    <!-- Main Application Container -->
+    <div class="app-wrapper">
+        <div class="card" id="main-card">
+            <div id="view-container">
+                <!-- Views will be injected here dynamically -->
+            </div>
+        </div>
+    </div>
 
-<script src="script.js"></script>
+    <!-- ============================================== -->
+    <!-- TEMPLATES FOR VIEWS                            -->
+    <!-- ============================================== -->
 
+    <!-- View 1: The Question -->
+    <template id="tpl-invite">
+        <div class="view scale-in">
+            <div class="heart-pulse-container">
+                <div class="big-heart">❤️</div>
+            </div>
+            <h1 class="pink-glow">Will you go on a date with me? 🌸</h1>
+            <div class="buttons-container" id="invite-buttons">
+                <button class="btn-primary btn-yes" id="btnYes">YES ❤️</button>
+                <button class="btn-secondary btn-no" id="btnNo">NO 😢</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- View 2: Activity -->
+    <template id="tpl-activity">
+        <div class="view slide-up">
+            <h1>🎯 What should we do?</h1>
+            <p class="subtitle">Pick an activity for our date</p>
+            <div class="grid-options" id="activity-grid">
+                <button class="grid-btn" data-value="Tennis 🎾" data-emoji="🎾">🎾 Tennis</button>
+                <button class="grid-btn" data-value="Cinema 🎬" data-emoji="🎬">🎬 Cinema</button>
+                <button class="grid-btn" data-value="Coffee ☕" data-emoji="☕">☕ Coffee</button>
+                <button class="grid-btn" data-value="Bowling 🎳" data-emoji="🎳">🎳 Bowling</button>
+                <button class="grid-btn dinner-btn" data-value="Dinner 🍽" data-emoji="🍽">🍽 Dinner</button>
+                <button class="grid-btn" data-value="Arcade 🎮" data-emoji="🎮">🎮 Arcade</button>
+                <button class="grid-btn" data-value="Sunset 🌅" data-emoji="🌅">🌅 Sunset</button>
+                <button class="grid-btn" data-value="Amusement Park 🎡" data-emoji="🎡">🎡 Park</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- View 3: Food (Conditional) -->
+    <template id="tpl-food">
+        <div class="view slide-up">
+            <h1>🍽️ What are we eating?</h1>
+            <p class="subtitle">Food is the way to the heart</p>
+            <div class="grid-options" id="food-grid">
+                <button class="grid-btn" data-value="Pizza 🍕" data-emoji="🍕">🍕 Pizza</button>
+                <button class="grid-btn" data-value="Pasta 🍝" data-emoji="🍝">🍝 Pasta</button>
+                <button class="grid-btn" data-value="Sushi 🍣" data-emoji="🍣">🍣 Sushi</button>
+                <button class="grid-btn" data-value="Ice Cream 🍨" data-emoji="🍨">🍨 Ice Cream</button>
+                <button class="grid-btn" data-value="Burgers 🍔" data-emoji="🍔">🍔 Burgers</button>
+                <button class="grid-btn" data-value="Street Food 🌮" data-emoji="🌮">🌮 Street Food</button>
+                <button class="grid-btn" data-value="Fancy Dinner 🥂" data-emoji="🥂">🥂 Fancy</button>
+                <button class="grid-btn" data-value="Dessert 🍰" data-emoji="🍰">🍰 Dessert</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- View 4: Date and Time -->
+    <template id="tpl-datetime">
+        <div class="view slide-up">
+            <h1>✨ When are you free? ✨</h1>
+            
+            <div class="form-group mt-20">
+                <label for="datePicker">Select a Perfect Date</label>
+                <input type="text" id="datePicker" class="custom-input" placeholder="Tap to select date" readonly>
+            </div>
+            
+            <div class="form-group mt-20">
+                <label for="timeInput">Select Time</label>
+                <div class="select-wrapper">
+                    <select id="timeInput" class="custom-select">
+                        <option value="" disabled selected>Choose time</option>
+                        <!-- Options generated via JS (06:00 to 23:00) -->
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-primary mt-30 w-100" id="btnNextDateTime">Next Step ➜</button>
+        </div>
+    </template>
+
+    <!-- View 5: Excitement -->
+    <template id="tpl-excitement">
+        <div class="view slide-up">
+            <h1>🔥 How excited are you?</h1>
+            <div class="excitement-visualizer">
+                <div id="excitementEmoji" class="bouncing-emoji">😊</div>
+            </div>
+            <div class="slider-container">
+                <input type="range" min="1" max="100" value="50" class="custom-slider" id="excitementSlider">
+                <div class="slider-labels">
+                    <span>A little bit</span>
+                    <span>SUPER EXCITED!</span>
+                </div>
+            </div>
+            <button class="btn-primary mt-30 w-100" id="btnFinish">Send Invitation 💌</button>
+        </div>
+    </template>
+
+    <!-- View 6: Loading -->
+    <template id="tpl-loading">
+        <div class="view fade-in flex-center">
+            <div class="loader-heart"></div>
+            <h2 class="mt-20 sending-text">Sending love to the servers...</h2>
+        </div>
+    </template>
+
+    <!-- View 7: Final -->
+    <template id="tpl-final">
+        <div class="view scale-in">
+            <h1 class="final-title glow-text">❤️ It's a date! ❤️</h1>
+            <p class="final-desc">The invitation has been successfully sent.</p>
+            
+            <div class="summary-card mt-20">
+                <p><strong>Activity:</strong> <span id="final-activity"></span></p>
+                <p id="food-summary-row" style="display:none;"><strong>Food:</strong> <span id="final-food"></span></p>
+                <p><strong>When:</strong> <span id="final-time"></span></p>
+            </div>
+
+            <div class="bot-reminder-box mt-30">
+                <p class="subtitle mb-10">Don't forget our date! Click below to set a reminder and let me know you're ready.</p>
+                <a href="https://t.me/erfan_date_bot?start=date_accepted" target="_blank" class="btn-telegram">
+                    <span>🤖 Get Reminder in Telegram</span>
+                </a>
+            </div>
+        </div>
+    </template>
+
+    <!-- Core Logic -->
+    <script src="script.js"></script>
 </body>
-
 </html>
